@@ -34,7 +34,7 @@
         <div class="row">
           <p class="hour col-2">9AM</p>
           <textarea class="col-8 description" id="FormInput"></textarea>
-          <button type="submit" data-event= "none" class="col-2 saveBtn"><i class="far fa-save"></i></button>
+          <button type="submit" data-event= "none" class="col-2 saveBtn" value="9AM"><i class="far fa-save"></i></button>
         </div>
       </form>
     </div>
@@ -42,46 +42,71 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
     <script>
-      const m = moment();
-      // display current day
-       console.log(m.format("dddd, MMMM do YYYY"));
-      var currentDate=m.format("dddd, MMMM do YYYY");
-      $("#currentDay").text(currentDate);
+      $(document).ready(function() {
+          const m = moment();
+          // display current day
+          console.log(m.format("dddd, MMMM do YYYY"));
+          var currentDate=m.format("dddd, MMMM do YYYY");
+          $("#currentDay").text(currentDate);
 
-      // create time block element for standard business hours
-      
-      let arrTime= ["10AM", "11AM", "12PM", "1PM", "2PM", "3PM", "4PM", "5PM"]; 
+          // create time block element for standard business hours
+          
+          let arrTime= ["10AM", "11AM", "12PM", "1PM", "2PM", "3PM", "4PM", "5PM"]; 
+            // add attr 
+            
+            for (var i=0; i<arrTime.length; i++){
+                var TimeBlockEL= $("#9AM").clone();
+                TimeBlockEL.attr("id", arrTime[i]); 
+                TimeBlockEL.children(".row"); 
+                TimeBlockEL.children(".row").children(".hour").text(arrTime[i]); 
+                TimeBlockEL.children(".row").children(".saveBtn").attr("value", arrTime[i]);
+                TimeBlockEL.appendTo(".container"); 
 
-        for (var i=0; i<arrTime.length; i++){
-            var TimeBlockEL= $("#9AM").clone();
-            TimeBlockEL.attr("id", arrTime[i]); 
-            TimeBlockEL.children(".row"); 
-            TimeBlockEL.children(".row").children(".hour").text(arrTime[i]); 
-            TimeBlockEL.appendTo(".container"); 
+            }; 
+            
 
-        }; 
+            // Check time block
+            var hourDayTime=moment().format("hA");
+            console.log (hourDayTime);
+            var timeBlockAllEL = $(".time-block");
+            for (var i=0; i < timeBlockAllEL.length; i++){
+              var timeBlockId=timeBlockAllEL.attr("id");
+              var timeBlockArea=timeBlockAllEL.children(".row").children("textarea")
+                  if (timeBlockId === hourDayTime){
+                    timeBlockArea.addClass("present");
+
+                  }else if(moment(timeBlockId, "hA").isBefor){
+                    timeBlockArea.addClass("past");
+
+                  }else if(moment(timeBlockId, "hA").isAfter){
+                    timeBlockArea.addClass("future");
+                  }
+            
+            }
+            // click into a time block THEN I can enter an event
+            $(".saveBtn").on("click", function(event){
+              
+              event.preventDefault();
+              var me = event.currentTarget;
+              // console.log($(this).siblings("p").text);
+              
+
+              var time =$(this).prop("value");
+              console.log(time);
+              var inputtext=$(this).siblings('input').val()
+              console.log(inputtext);
+              alert("I have clicked");
+
+              // var time = $( 'p', this ).children.text;
+              // create JSON object
+
+              // save to local storage
+
+              // localStorage.setItem("dayScheduler",jSON.stringfy());
+            });
 
 
-        // Check time block
-        var hourDayTime=moment().format("hA");
-        console.log (hourDayTime);
-        var timeBlockAllEL = $(".time-block");
-        for (var i=0; i < timeBlockAllEL.length; i++){
-          var timeBlockId=timeBlockAllEL.attr("id");
-          var timeBlockArea=timeBlockAllEL.children(".row").children("textarea")
-          if (timeBlockId === hourDayTime){
-            timeBlockArea.addClass("present");
-
-          }else if(moment(timeBlockId, "hA").isBefor){
-            timeBlockArea.addClass("past");
-
-          }else if(moment(timeBlockId, "hA").isAfter){
-            timeBlockArea.addClass("future");
-          }
-        
-        
-        }
-
+     });    
     </script>
   </body>
 </html>

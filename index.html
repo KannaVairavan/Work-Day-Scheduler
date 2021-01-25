@@ -140,10 +140,15 @@
               clearLocalStorage();
             //  get input text from each time block
               var timeBlockAllEL = $(".time-block");
-                for (var i=0; i<arrTime.length; i++){
-                var time =arrTime[i];
-                var timeArrid="#"+arrTime[i];
-                console.log(timeArrid);
+                // for (var i=0; i<arrTime.length; i++){
+                  
+                for (var i=0; i<timeBlockAllEL.length; i++){
+                // var time =arrTime[i];
+                var arrTimeBlock =$(timeBlockAllEL[i]);
+                var time=arrTimeBlock.attr("id");
+                // var timeArrid="#"+arrTime[i];
+                var timeArrid="#"+time;
+                console.log("time button", time);
                 var inputtext=$(timeArrid).children(".row").children("textarea").val();
                 scheduleDataObj(time,inputtext);
               }

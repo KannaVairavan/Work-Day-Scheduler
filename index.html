@@ -30,10 +30,11 @@
     </header>
     <div class="container">
       <!-- Timeblocks go here -->
+      <!--  -->
       <form class="time-block" id="9AM">
         <div class="row">
           <p class="hour col-2">9AM</p>
-          <textarea class="col-8 description" id="9AM"></textarea>
+          <textarea class="col-8 description" ></textarea>
           <button type="submit" data-event= "none" class="col-2 saveBtn" value="9AM"><i class="far fa-save"></i></button>
         </div>
       </form>
@@ -43,6 +44,12 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
     <script>
       $(document).ready(function() {
+        // Refresh page every hour 
+        setTimeout(function(){
+            location.reload();
+        },600000);
+
+        // Declare schedule array
         var scheduleArray=[];
         
           const m = moment();
@@ -52,7 +59,11 @@
           $("#currentDay").text(currentDate);
 
           // create time block element for standard business hours
-          
+          // clone time  block div
+          // add id for each block
+          // add button value for each block
+          // display arrTime array value for each hour class
+          // append time block element to the container
           let arrTime= ["9AM", "10AM", "11AM", "12PM", "1PM", "2PM", "3PM", "4PM", "5PM"]; 
             // add attr 
             
@@ -68,27 +79,32 @@
             }; 
             
 
-            // Check time block
+            // Check time and assign css class
 
             var hourDayTime=moment().format("hA");
             console.log (hourDayTime);
             var timeBlockAllEL = $(".time-block");
             console.log("time block", timeBlockAllEL.length);
             for (var i=0; i < timeBlockAllEL.length; i++){
-              var timeBlockId=timeBlockAllEL.attr("id");
+              var arrTimeBlock=$(timeBlockAllEL[i]);
+              var timeBlockId=arrTimeBlock.attr("id");
               console.log("time block id", timeBlockId);
-              var timeBlockArea=timeBlockAllEL.children(".row").children("textarea");
+              var timeBlockArea=arrTimeBlock.children(".row").children("textarea");
                   if (timeBlockId === hourDayTime){
                     timeBlockArea.addClass("present");
 
-                  }else if(moment(timeBlockId, "hA").isBefore){
+                  }else if(moment(timeBlockId, "hA").isBefore()){
                     timeBlockArea.addClass("past");
 
-                  }else if(moment(timeBlockId, "hA").isAfter){
+                  }else if (moment(timeBlockId, "hA").isAfter()) {
                     timeBlockArea.addClass("future");
                   }
             
             }
+
+            // parse JSON local storage object 
+            // display text area for each block
+
             retriveScheduleArray();
 
             function retriveScheduleArray(){
@@ -122,7 +138,7 @@
               // console.log(inputtext);
               // scheduleDataObj(time,inputtext);
               clearLocalStorage();
-             
+            //  get input text from each time block
               var timeBlockAllEL = $(".time-block");
                 for (var i=0; i<arrTime.length; i++){
                 var time =arrTime[i];
@@ -131,6 +147,7 @@
                 var inputtext=$(timeArrid).children(".row").children("textarea").val();
                 scheduleDataObj(time,inputtext);
               }
+              // save to local storage
               localStorage.setItem('dayScheduler', JSON.stringify(scheduleArray));
 
 
@@ -138,10 +155,17 @@
 
             // function to clear local storage index
             function clearLocalStorage(){
-              scheduleArray=[];
-              localStorage.setItem('dayScheduler', JSON.stringify(scheduleArray))
+                
+                  
+                  scheduleArray=[];
+                  localStorage.setItem('dayScheduler', JSON.stringify(scheduleArray));
+                
+                
+              
+              
             }
-            // save to local storage
+
+            // create scheduledata object and push it into scheduleArray
             function scheduleDataObj(time,inputtext){
               var scheduleData = {
                 timeIndex:time,

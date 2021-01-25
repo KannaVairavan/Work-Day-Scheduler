@@ -33,7 +33,7 @@
       <form class="time-block" id="9AM">
         <div class="row">
           <p class="hour col-2">9AM</p>
-          <textarea class="col-8 description" id="FormInput"></textarea>
+          <textarea class="col-8 description" id="9AM"></textarea>
           <button type="submit" data-event= "none" class="col-2 saveBtn" value="9AM"><i class="far fa-save"></i></button>
         </div>
       </form>
@@ -43,6 +43,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
     <script>
       $(document).ready(function() {
+        var scheduleArray=[];
+        
           const m = moment();
           // display current day
           console.log(m.format("dddd, MMMM do YYYY"));
@@ -58,7 +60,8 @@
                 var TimeBlockEL= $("#9AM").clone();
                 TimeBlockEL.attr("id", arrTime[i]); 
                 TimeBlockEL.children(".row"); 
-                TimeBlockEL.children(".row").children(".hour").text(arrTime[i]); 
+                TimeBlockEL.children(".row").children(".hour").text(arrTime[i]);
+                 
                 TimeBlockEL.children(".row").children(".saveBtn").attr("value", arrTime[i]);
                 TimeBlockEL.appendTo(".container"); 
 
@@ -71,7 +74,7 @@
             var timeBlockAllEL = $(".time-block");
             for (var i=0; i < timeBlockAllEL.length; i++){
               var timeBlockId=timeBlockAllEL.attr("id");
-              var timeBlockArea=timeBlockAllEL.children(".row").children("textarea")
+              var timeBlockArea=timeBlockAllEL.children(".row").children("textarea");
                   if (timeBlockId === hourDayTime){
                     timeBlockArea.addClass("present");
 
@@ -83,6 +86,27 @@
                   }
             
             }
+            retriveScheduleArray();
+
+            function retriveScheduleArray(){
+              if(localStorage.dayScheduler){
+                scheduleArray=JSON.parse(localStorage.dayScheduler);
+                console.log("local length", scheduleArray.length);
+                for(var i=0; i < scheduleArray.length; i++ ){
+                    var inputtext=scheduleArray[i].inputDesc;
+                    var timeArr=scheduleArray[i].timeIndex;
+                    var timeArrid="#"+timeArr;
+                    console.log("timeArr id",  timeArrid);
+                    
+                    var timeBlockId=$(timeArrid).children(".row").children("textarea");
+                    timeBlockId.val(inputtext);
+                   
+                  }
+                  
+                }
+              }
+          
+           
             // click into a time block THEN I can enter an event
             $(".saveBtn").on("click", function(event){
               
@@ -90,11 +114,15 @@
               var me = event.currentTarget;
               // console.log($(this).siblings("p").text);
               
-
+              // console.log($(this).prev("textarea").text);
               var time =$(this).prop("value");
               console.log(time);
-              var inputtext=$(this).siblings('input').val()
+              var inputtext=$(this).prev('.description').val();
               console.log(inputtext);
+              
+             
+             
+              scheduleDataObj(time,inputtext);
               alert("I have clicked");
 
               // var time = $( 'p', this ).children.text;
@@ -105,7 +133,19 @@
               // localStorage.setItem("dayScheduler",jSON.stringfy());
             });
 
-
+            // function to clear local storage index
+            // save to local storage
+            function scheduleDataObj(time,inputtext){
+              var scheduleData = {
+                timeIndex:time,
+                inputDesc:inputtext
+              };             
+              scheduleArray.push(scheduleData);  
+              console.log(scheduleArray);
+              localStorage.setItem('dayScheduler', JSON.stringify(scheduleArray));
+              
+            }
+            
      });    
     </script>
   </body>

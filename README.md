@@ -23,7 +23,7 @@ past (gray), present (red), or future (green)
 
 ### Local Storage
 
-Each time block has text area where the uses can enter event and click save button.
+Each time block has text area where the user can enter event and click save button.
 The event text is saved in local storage.
 When I refresh the page the app will render saved events.
 

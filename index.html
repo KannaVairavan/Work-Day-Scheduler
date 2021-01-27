@@ -79,7 +79,7 @@
             }; 
             
 
-            // Check time and assign css class
+            // Check time and assign css class based on the time block
 
             var hourDayTime=moment().format("hA");
             console.log (hourDayTime);
@@ -140,19 +140,17 @@
               clearLocalStorage();
             //  get input text from each time block
               var timeBlockAllEL = $(".time-block");
-                // for (var i=0; i<arrTime.length; i++){
-                  
+               
                 for (var i=0; i<timeBlockAllEL.length; i++){
-                // var time =arrTime[i];
-                var arrTimeBlock =$(timeBlockAllEL[i]);
-                var time=arrTimeBlock.attr("id");
-                // var timeArrid="#"+arrTime[i];
-                var timeArrid="#"+time;
-                console.log("time button", time);
-                var inputtext=$(timeArrid).children(".row").children("textarea").val();
-                scheduleDataObj(time,inputtext);
+                  var arrTimeBlock =$(timeBlockAllEL[i]);
+                  var time=arrTimeBlock.attr("id");
+                  var timeArrid="#"+time;
+                  console.log("time button", time);
+                  var inputtext=$(timeArrid).children(".row").children("textarea").val();
+                  scheduleDataObj(time,inputtext);
               }
               // save to local storage
+
               localStorage.setItem('dayScheduler', JSON.stringify(scheduleArray));
 
 
@@ -161,13 +159,9 @@
             // function to clear local storage index
             function clearLocalStorage(){
                 
-                  
                   scheduleArray=[];
                   localStorage.setItem('dayScheduler', JSON.stringify(scheduleArray));
-                
-                
-              
-              
+             
             }
 
             // create scheduledata object and push it into scheduleArray
@@ -178,7 +172,6 @@
               };             
               scheduleArray.push(scheduleData);  
               console.log(scheduleArray);
-              
               
             }
             
